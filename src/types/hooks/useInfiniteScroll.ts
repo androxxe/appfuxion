@@ -3,8 +3,7 @@ import {NativeSyntheticEvent, TextInputSubmitEditingEventData} from 'react-nativ
 
 export type InfiniteScrollPayloadType = {
     page: number,
-    take: number,
-    search: string | undefined,
+    q: string | undefined,
     [key: string]: any // Index signature for additional keys
 }
 
@@ -23,5 +22,5 @@ export type InfiniteScrollReturnType = {
     setPayload: Dispatch<SetStateAction<InfiniteScrollPayloadType>>,
     search: string | undefined,
     onEditing: (value: string | undefined) => void,
-    loading: boolean
+    isLoading: boolean
 }

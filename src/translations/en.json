@@ -1,6 +1,7 @@
 {
   "navigation.home": "Home",
   "navigation.statistics": "Statistics",
+  "navigation.news": "News",
   "navigation.statisticsDetail": "Statistic Detail",
   "navigation.profile": "Profile"
 }

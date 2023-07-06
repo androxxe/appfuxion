@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 type useGetResponse = {
     data: any
-    loading: boolean
+    isLoading: boolean
     error: Error | unknown
     refetch: () => void
 }
@@ -13,19 +13,19 @@ export default function useGET<T>(
     autoStart = true
 ): useGetResponse {
     const [data, setData] = useState<T | undefined>()
-    const [loading, setLoading] = useState<boolean>(true)
+    const [isLoading, setIsLoading] = useState<boolean>(true)
     const [error, setError] = useState<Error | null | unknown>(null)
 
     const fetchData = async () => {
-        setLoading(true)
+        setIsLoading(true)
         try {
             const res = await endpoint()
             setData(res as T)
-            setLoading(false)
+            setIsLoading(false)
             setError(null)
         } catch (err) {
             setError(err)
-            setLoading(false)
+            setIsLoading(false)
         }
     }
 
@@ -39,5 +39,5 @@ export default function useGET<T>(
         fetchData()
     }
 
-    return { data, loading, error, refetch }
+    return { data, isLoading, error, refetch }
 }

@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import {useEffect, useState} from 'react'
 import {
     InfiniteScrollPayloadType,
     InfiniteScrollPropsType,
@@ -7,32 +7,37 @@ import {
 import useGET from "@/hooks/useGET";
 
 const useInfiniteScroll = (props: InfiniteScrollPropsType): InfiniteScrollReturnType => {
-    const { extendsPayload, baseEndpoint } = props
+    const {extendsPayload, baseEndpoint} = props
 
     const [refreshing, setRefreshing] = useState(false)
     const [search, setSearch] = useState<string | undefined>('')
-    const [data, setData] = useState({ data: [] })
+    const [data, setData] = useState({docs: []})
     const [isEnd, setIsEnd] = useState(false)
     const [isRefresh, setIsRefresh] = useState(false)
 
-
     const [payload, setPayload] = useState<InfiniteScrollPayloadType>({
         page: 1,
-        take: 10,
-        search: '',
+        q: '',
         ...extendsPayload
     })
 
     const {
         data: dataAPI,
-        loading: loadingAPI,
+        isLoading: isLoadingAPI,
         refetch: refetchAPI,
         error: errorAPI
     }: any = useGET(() => baseEndpoint(payload))
 
     useEffect(() => {
+        if (errorAPI) {
+            console.log(JSON.stringify(errorAPI, null, 2))
+            // alert(JSON.stringify(errorAPI))
+        }
+    }, [errorAPI])
+
+    useEffect(() => {
         if (dataAPI) {
-            if (dataAPI.data.length === 0 && payload.page !== 1) {
+            if (dataAPI.response.docs.length === 0 && payload.page !== 1) {
                 setIsEnd(true)
             }
         }
@@ -40,45 +45,42 @@ const useInfiniteScroll = (props: InfiniteScrollPropsType): InfiniteScrollReturn
 
     useEffect(() => {
         if (!errorAPI) {
-            getBookingData(false)
+            getData(false)
         }
-    }, [payload])
-    // }, [payload.timeFrom, payload.timeTill, payload.page])
-
+    }, [payload.page])
 
     useEffect(() => {
-
         if (!errorAPI) {
             if (refreshing && payload.page === 1) {
-
-                getBookingData(true)
-            } else if (payload.search !== '' || payload.page === 1) {
-
-                getBookingData(true)
+                getData(true)
+            } else if (payload.q !== '' || payload.page === 1) {
+                getData(true)
             }
         }
-    }, [payload.page, payload.search, refreshing])
+    }, [payload.page, payload.q, refreshing])
 
     useEffect(() => {
-        if (isEnd || !dataAPI || loadingAPI) {
+        if (isEnd || !dataAPI || isLoadingAPI) {
             return
         }
 
         if (isRefresh) {
-            setData(dataAPI)
+            console.log('useEffect 2 unexpec', dataAPI)
+            setData(dataAPI.response)
         } else {
-            setData({ ...data, ...dataAPI, data: [...data.data, ...dataAPI.data] })
+            console.log('useEffect', dataAPI)
+            setData({...data, ...dataAPI.response, docs: [...data.docs, ...dataAPI.response.docs]})
         }
-    }, [dataAPI, isRefresh, isEnd, loadingAPI])
+    }, [dataAPI, isRefresh, isEnd, isLoadingAPI])
 
     const onEndReached = () => {
-        if (loadingAPI || isEnd) return true
+        if (isLoadingAPI || isEnd) return true
 
-        setPayload({ ...payload, page: payload.page + 1 })
+        setPayload({...payload, page: payload.page + 1})
     }
 
-    const getBookingData = async (refreshing: boolean): Promise<void> => {
-        if (loadingAPI || isEnd) return Promise.resolve()
+    const getData = async (refreshing: boolean): Promise<void> => {
+        if (isLoadingAPI || isEnd) return Promise.resolve()
         setIsRefresh(refreshing)
         await refetchAPI()
         setRefreshing(false)
@@ -95,10 +97,11 @@ const useInfiniteScroll = (props: InfiniteScrollPropsType): InfiniteScrollReturn
     }
 
     const onSubmitEditing = (event: any) => {
-        const { text } = event.nativeEvent
+        console.log('onSubmitEdditing')
+        const {text} = event.nativeEvent
         setSearch(text)
         setIsEnd(false)
-        setPayload({ ...payload, search: text, page: 1 })
+        setPayload({...payload, q: text, page: 1})
     }
 
     const onEditing = (value: string | undefined) => {
@@ -115,7 +118,7 @@ const useInfiniteScroll = (props: InfiniteScrollPropsType): InfiniteScrollReturn
         setPayload,
         onEditing,
         search,
-        loading: loadingAPI
+        isLoading: isLoadingAPI
     }
 }
 

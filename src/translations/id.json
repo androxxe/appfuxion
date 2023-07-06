@@ -1,6 +1,7 @@
 {
   "navigation.home": "Beranda",
   "navigation.statistics": "Statistik",
+  "navigation.news": "Berita",
   "navigation.statisticsDetail": "Detail Statistik",
   "navigation.profile": "Profil"
 }
