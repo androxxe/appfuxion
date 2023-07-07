@@ -1,4 +1,9 @@
 export  type useWebsocketRes = {
     data: any,
-    isLoading: boolean
+    errors: any,
+    isOpen: boolean
+}
+
+export type WebsocketSendType = {
+    sendData: any
 }

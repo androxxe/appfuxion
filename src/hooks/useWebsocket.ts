@@ -1,11 +1,12 @@
 import {useFocusEffect} from "@react-navigation/native";
 import {useCallback, useState} from "react";
 import {useWebsocketRes} from "@/types/hooks/useWebsocket";
+import {WebsocketSendType} from "../types/hooks/useWebsocket";
 
-export default function useWebsocket(WebSocketsURL: string): useWebsocketRes {
+export default function useWebsocket(WebSocketsURL: string, sendData: WebsocketSendType): useWebsocketRes {
     const [data, setData] = useState<any>({});
     const [errors, setErrors] = useState('')
-    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [isOpen, setIsOpen] = useState(false)
 
     useFocusEffect(
         useCallback(() => {
@@ -21,7 +22,10 @@ export default function useWebsocket(WebSocketsURL: string): useWebsocketRes {
     const openWebsocket = () => {
         const ws = new WebSocket(WebSocketsURL);
         ws.onopen = function () {
-            // ws.send(JSON.stringify(["markets"]));
+            if (sendData) {
+                ws.send(JSON.stringify(sendData));
+            }
+            setIsOpen(true)
             console.log("Connected to WS");
         };
 
@@ -33,10 +37,12 @@ export default function useWebsocket(WebSocketsURL: string): useWebsocketRes {
         };
 
         ws.onclose = function (e: CloseEvent): void {
+            setIsOpen(false)
             console.log("sockets closed", e);
         };
 
         ws.onerror = function (error: Event): void {
+            setIsOpen(false)
             setErrors(error)
             console.log("Sockets.error: ", error);
             ws.close();
@@ -45,5 +51,5 @@ export default function useWebsocket(WebSocketsURL: string): useWebsocketRes {
         return ws;
     };
 
-    return {data, isLoading, errors}
+    return {data, errors, isOpen}
 }

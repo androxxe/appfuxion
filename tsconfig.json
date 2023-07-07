@@ -4,10 +4,11 @@
     "./tsconfig.paths.json"
   ],
   "compilerOptions": {
-    "jsx": "react",
+    "jsx": "react-native",
     "strict": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true
   }
 }

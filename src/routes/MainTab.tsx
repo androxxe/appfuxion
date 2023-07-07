@@ -5,7 +5,7 @@ import {BottomTabHeaderProps, createBottomTabNavigator} from "@react-navigation/
 import {t} from "i18next";
 import {Entypo, Feather, Ionicons} from "@expo/vector-icons";
 import colors from 'tailwindcss/colors'
-import Header from "@/components/Header";
+import {Header} from "@androxxe/andrio-ui";
 import News from "@/pages/News";
 
 const Tab = createBottomTabNavigator();

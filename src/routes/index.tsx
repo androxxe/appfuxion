@@ -5,7 +5,6 @@ import StatisticDetail from "@/pages/StatisticDetail";
 import {navigationRef} from "@/helpers/navigation";
 
 const MainStack = createStackNavigator();
-
 export default function MainRoute(): JSX.Element {
     return (
         <NavigationContainer ref={navigationRef}>

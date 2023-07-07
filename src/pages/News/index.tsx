@@ -1,6 +1,6 @@
 import {ActivityIndicator, FlatList, Text, View} from "react-native";
-import Input from "@/components/Input";
-import {useEffect, useState} from "react";
+import {Input} from "@androxxe/andrio-ui";
+import {useEffect} from "react";
 import {getNewsAPI} from "@/services/endpoints/news";
 import {NewsPayload} from "@/types/news";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
@@ -11,7 +11,6 @@ const Card = ({data}) => {
     const {item} = data
     return (
         <View className={"mb-3 px-3 py-3 bg-white rounded-lg shadow space-y-1"}>
-            {/*<Text>{JSON.stringify(data)}</Text>*/}
             <Text className={"font-bold"}>Abstract</Text>
             <Text className={"mb-2"}>{item.abstract}</Text>
             <Text className={"font-bold"}>Snippet</Text>
@@ -30,12 +29,12 @@ const Card = ({data}) => {
     )
 }
 export default function News(): JSX.Element {
-    const [payload, setPayload] = useState<NewsPayload>({
+    const payload: NewsPayload = {
         facet_fields: "day_of_week",
         facet_filter: "true",
         fl: "abstract,web_url,snippet,lead_paragraph,source,word_count,keywords,headline",
         "api-key": "Ivb0pYFlx6ZI551ukQ809H0zQpHUdYA2"
-    })
+    }
 
     const {data, isLoading, error, isEnd, onSubmitEditing, onEditing, search, onEndReached} = useInfiniteScroll({
         extendsPayload: payload,
@@ -50,8 +49,6 @@ export default function News(): JSX.Element {
 
     return (
         <View>
-            {/*<Text>{JSON.stringify(error)}</Text>*/}
-            {/*<Text>{JSON.stringify(data)}</Text>*/}
             <FlatList
                 ListHeaderComponent={
                     <View>
@@ -65,14 +62,11 @@ export default function News(): JSX.Element {
                                 leftIcon={<Feather name='search' size={20} color='#87878B'/>}
                             />
                         </View>
-                        {/*{isLoading &&*/}
-                        {/*    <ActivityIndicator className={"my-3"} size={"large"} color={colors.blue[500]}/>*/}
-                        {/*}*/}
                     </View>
                 }
                 data={data.docs}
                 renderItem={(data: any) => <Card data={data}/>}
-                keyExtractor={(item, index) => `${index}`}
+                keyExtractor={(item, index) => `${item.web_url}_${Date.now()}_${index}`}
                 onEndReached={onEndReached}
                 onEndReachedThreshold={0.5}
                 ListFooterComponent={<View>
