@@ -1,7 +1,6 @@
 import {View} from 'react-native'
 import React from 'react'
 import {navigate} from "@/helpers/navigation";
-// import Button from "../../components/Button";
 import {Button} from '@androxxe/andrio-ui'
 
 const Statistics = () => {

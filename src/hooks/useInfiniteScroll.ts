@@ -9,11 +9,11 @@ import useGET from "@/hooks/useGET";
 const useInfiniteScroll = (props: InfiniteScrollPropsType): InfiniteScrollReturnType => {
     const {extendsPayload, baseEndpoint} = props
 
-    const [refreshing, setRefreshing] = useState(false)
+    const [refreshing, setRefreshing] = useState<boolean>(false)
     const [search, setSearch] = useState<string | undefined>('')
     const [data, setData] = useState({docs: []})
-    const [isEnd, setIsEnd] = useState(false)
-    const [isRefresh, setIsRefresh] = useState(false)
+    const [isEnd, setIsEnd] = useState<boolean>(false)
+    const [isRefresh, setIsRefresh] = useState<boolean>(false)
 
     const [payload, setPayload] = useState<InfiniteScrollPayloadType>({
         page: 1,
@@ -31,7 +31,7 @@ const useInfiniteScroll = (props: InfiniteScrollPropsType): InfiniteScrollReturn
     useEffect(() => {
         if (errorAPI) {
             console.log(JSON.stringify(errorAPI, null, 2))
-            // alert(JSON.stringify(errorAPI))
+            alert(JSON.stringify(errorAPI.message))
         }
     }, [errorAPI])
 
@@ -65,10 +65,10 @@ const useInfiniteScroll = (props: InfiniteScrollPropsType): InfiniteScrollReturn
         }
 
         if (isRefresh) {
-            console.log('useEffect 2 unexpec', dataAPI)
+            // console.log('useEffect 2 unexpec', dataAPI)
             setData(dataAPI.response)
         } else {
-            console.log('useEffect', dataAPI)
+            // console.log('useEffect', dataAPI)
             setData({...data, ...dataAPI.response, docs: [...data.docs, ...dataAPI.response.docs]})
         }
     }, [dataAPI, isRefresh, isEnd, isLoadingAPI])

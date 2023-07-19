@@ -4,7 +4,12 @@ import {NavigationContainer} from "@react-navigation/native";
 import StatisticDetail from "@/pages/StatisticDetail";
 import {navigationRef} from "@/helpers/navigation";
 
-const MainStack = createStackNavigator();
+type RootStackParamList = {
+    MainTab: undefined;
+    StatisticDetail: undefined
+};
+
+const MainStack = createStackNavigator<RootStackParamList>();
 export default function MainRoute(): JSX.Element {
     return (
         <NavigationContainer ref={navigationRef}>

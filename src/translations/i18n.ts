@@ -15,7 +15,7 @@ i18n.use(initReactI18next).init({
         en: { translation: EN },
         id: { translation: ID }
     },
-    // lng: getLocales()[0].languageCode, // Get the first device language
+    lng: getLocales()[0].languageCode, // Get the first device language
     fallbackLng: 'en',
     compatibilityJSON: 'v3' // By default React Native projects does not support Intl
 })

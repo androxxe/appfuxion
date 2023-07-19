@@ -1,6 +1,7 @@
 import React, {ScrollView, Text, View} from "react-native";
 import useWebsocket from "@/hooks/useWebsocket";
 import {websockets} from "@/services/websockets";
+import {MarketResponse} from "../../types/tradernet";
 
 const Home = () => {
     const {data: cryptofacilities, isOpen: isOpenCryptofacilities} = useWebsocket(websockets.cryptofacilities, {
@@ -8,7 +9,7 @@ const Home = () => {
         "feed": "trade",
         "product_ids": ["PI_XBTUSD"]
     })
-    const {data: tradernet, isOpen: isOpenTradernet} = useWebsocket(websockets.tradernet, ["markets"])
+    const {data: tradernet, isOpen: isOpenTradernet}: { data: MarketResponse } = useWebsocket(websockets.tradernet, ["markets"])
 
     return (
         <ScrollView className="p-5 space-y-4">

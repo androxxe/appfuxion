@@ -1,9 +1,8 @@
 import {useFocusEffect} from "@react-navigation/native";
 import {useCallback, useState} from "react";
 import {useWebsocketRes} from "@/types/hooks/useWebsocket";
-import {WebsocketSendType} from "../types/hooks/useWebsocket";
 
-export default function useWebsocket(WebSocketsURL: string, sendData: WebsocketSendType): useWebsocketRes {
+export default function useWebsocket(WebSocketsURL: string, sendData: any): useWebsocketRes {
     const [data, setData] = useState<any>({});
     const [errors, setErrors] = useState('')
     const [isOpen, setIsOpen] = useState(false)
@@ -30,10 +29,8 @@ export default function useWebsocket(WebSocketsURL: string, sendData: WebsocketS
         };
 
         ws.onmessage = function (m: MessageEvent<any>): void {
-            // const [event, response] = JSON.parse(m.data);
-            // console.log("onmessage");
             setData(m.data)
-            console.log('onmessage', m)
+            console.log('onmessage')
         };
 
         ws.onclose = function (e: CloseEvent): void {
@@ -43,7 +40,7 @@ export default function useWebsocket(WebSocketsURL: string, sendData: WebsocketS
 
         ws.onerror = function (error: Event): void {
             setIsOpen(false)
-            setErrors(error)
+            setErrors(error as any)
             console.log("Sockets.error: ", error);
             ws.close();
         };
